@@ -42,16 +42,54 @@ public class AdapterMap extends HashMap<Class<?>, TypeAdapter<?>> {
         put(String.class, String::valueOf);
         put(Character.class, argument -> argument.charAt(0));
         put(Integer.class, Integer::valueOf);
-        put(Double.class, Double::valueOf);
-        put(Float.class, Float::valueOf);
+
+        /*
+          Old adapter: put(Double.class, Double::valueOf);
+          This new adapter prevent user malicious NaN and Infinite values input;
+         */
+        put(Double.class, (string) -> {
+            final double value = Double.parseDouble(string);
+            if(Double.isNaN(value) || Double.isInfinite(value)) return null;
+            return value;
+        });
+
+        /*
+         * Old adapter: put(Float.class, Float::valueOf);
+         * This new adapter prevent user malicious NaN and Infinite values input;
+         */
+        put(Float.class, (string) -> {
+            final float value = Float.parseFloat(string);
+            if(Float.isNaN(value) || Float.isInfinite(value)) return null;
+            return value;
+        });
+
         put(Long.class, Long::valueOf);
         put(Boolean.class, Boolean::valueOf);
         put(Byte.class, Byte::valueOf);
 
         put(Character.TYPE, argument -> argument.charAt(0));
         put(Integer.TYPE, Integer::parseInt);
-        put(Double.TYPE, Double::parseDouble);
-        put(Float.TYPE, Float::parseFloat);
+
+        /*
+         * Old adapter: put(Double.TYPE, Double::parseDouble);
+         * This new adapter prevent user malicious NaN and Infinite values input;
+         */
+        put(Double.TYPE, (string) -> {
+            final double value = Double.parseDouble(string);
+            if(Double.isNaN(value) || Double.isInfinite(value)) return null;
+            return value;
+        });
+
+        /*
+         * Old adapter: put(Float.TYPE, Float::parseFloat);
+         * This new adapter prevent user malicious NaN and Infinite values input;
+         */
+        put(Float.TYPE, (string) -> {
+            final float value = Float.parseFloat(string);
+            if(Float.isNaN(value) || Float.isInfinite(value)) return null;
+            return value;
+        });
+
         put(Long.TYPE, Long::parseLong);
         put(Boolean.TYPE, Boolean::parseBoolean);
         put(Byte.TYPE, Byte::parseByte);

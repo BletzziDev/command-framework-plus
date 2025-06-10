@@ -44,7 +44,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -220,4 +219,13 @@ public final class BukkitFrame implements CommandFrame<Plugin, CommandSender, Bu
         return command != null && command.unregister(bukkitCommandMap);
     }
 
+    /**
+     * Create a command name annotation placeholder
+     */
+    public void setNamePlaceholder(final String placeholder, final String value) {
+        CommandInfo.getNamePlaceholders().put(placeholder, value);
+    }
+    public void setAliasesPlaceholder(final String placeholder, final String[] aliases) {
+        CommandInfo.getAliasesPlaceholders().put(placeholder, aliases);
+    }
 }

@@ -20,6 +20,8 @@ import lombok.*;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.target.CommandTarget;
 
+import java.util.HashMap;
+
 /**
  * @author Luiz Carlos Mourão
  */
@@ -28,6 +30,8 @@ import me.saiintbrisson.minecraft.command.target.CommandTarget;
 @Builder
 @AllArgsConstructor
 public class CommandInfo {
+    @Getter private static HashMap<String, String> namePlaceholders = new HashMap<>();
+    @Getter private static HashMap<String, String[]> aliasesPlaceholders = new HashMap<>();
 
     /**
      * Defines the command name, sub-commands are split with dots
@@ -37,7 +41,7 @@ public class CommandInfo {
      * parentcommand.subcommand<p>
      */
     @NonNull
-    private final String name;
+    private String name;
 
     /**
      * Defines the array of aliases of the command,
@@ -46,7 +50,7 @@ public class CommandInfo {
      */
     @NonNull
     @Builder.Default
-    private final String[] aliases = new String[0];
+    private String[] aliases = new String[0];
 
     /**
      * Defines the description of the command,
@@ -101,6 +105,18 @@ public class CommandInfo {
           command.target(),
           command.async()
         );
+
+        final String namePlaceholder = namePlaceholders.get(name);
+        if(namePlaceholder != null) {
+            name = namePlaceholder;
+        }
+
+        if(aliases.length > 0) {
+            final String[] customAliases = aliasesPlaceholders.get(aliases[0]);
+            if(customAliases != null) {
+                aliases = customAliases;
+            }
+        }
     }
 
 }
